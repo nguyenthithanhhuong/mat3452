@@ -1,0 +1,139 @@
+---
+title: "Bài tập vector, ma trận"
+author: "nguyenthithanhhuong"
+date: "2024-01-29"
+output: html_document
+---
+
+#### **Bài 1:** 
+Nhập vector X:
+```{r}
+X <- c(1:9)
+X
+```
+Nhập vector Y:
+```{r}
+Y <- c(1.5, 2.3, 3.2, 4.6, 5.4, 6.6, 7.6, 8.6, 9.1)
+Y
+```
+a.Tính độ dài hai vector
+```{r}
+norm(X, type="2")
+```
+```{r}
+norm(Y, type="2")
+```
+b.Trích phần tử thứ 2 trong vectơ X và trích các phần tử thứ 1, 4, 7 trong vectơ Y
+```{r}
+X[2]
+```
+```{r}
+Y[1]
+Y[4]
+Y[7]
+```
+c.Thay giá trị của phần tử thứ 4 trong X bởi 215. Thay các giá trị của các phần tử thứ 1, 5 trong Y bởi 99, 199.
+```{r}
+X[4] <- 215
+X
+```
+
+```{r}
+Y[1] <- 99
+Y[5] <- 199
+Y
+```
+d.Làm tròn giá trị các phần tử của Y.
+Làm tròn xuống
+```{r}
+floor(Y)
+```
+Làm tròn lên
+```{r}
+ceiling(Y)
+```
+e.Tính tổng X + Y; tích của 5 và Y.
+```{r}
+X + Y
+```
+```{r}
+5*Y
+```
+
+#### **Bài 2:**
+Nhập ma trận A:
+```{r}
+A <- matrix(c(1, 2, 1, 3, 3, 6, 5, 4, 2, 4, 3, 2, 8, 7, 5, 1), 4)
+A
+```
+Nhập ma trận B:
+```{r}
+B <- matrix(c(1, 2, 3, 4, 4, 1, 5, 3, 1, 7, 8, 9, 4, 6, 3, 7), 4)
+B
+```
+a.Đổi tên các hàng của ma trận A theo thứ tự lần lượt là “X”, “Y”, “Z”, “T” và đặt tên ma trận này là C.
+```{r}
+rownames(A) <- c("X", "Y", "Z", "T")
+A
+```
+```{r}
+C <- A
+C
+```
+b.Tính tổng các phần tử theo hàng và tổng các phần tử theo cột của ma trận B.
+```{r}
+rowSums(B)
+```
+```{r}
+colSums(B)
+```
+c.Tính giá trị trung bình các phần tử theo hàng và giá trị trung bình các phần tử theo cột của ma trận A.
+```{r}
+rowMeans(A)
+```
+```{r}
+colMeans(A)
+```
+d.Đưa ra giá trị ở hàng 2, cột 3 của ma trận A.
+```{r}
+A[2,3]
+```
+e.Đưa ra ma trận D với D là ma trận cỡ 2x4 gồm các phần tử ở hàng 1 và hàng 2 của ma trận A. 
+```{r}
+D <- matrix(c(A[1,], A[2,]), 2, byrow = TRUE)
+D
+```
+f.Đưa ra ma trận E với E là ma trận cỡ 4x3 gồm các phần tử trừ cột 3 của ma trận B. 
+```{r}
+E <- matrix(c(B[,-c(3)]), 4)
+E
+```
+g.Tính ma trận chuyển vị và ma trận nghịch đảo của ma trận A.
+```{r}
+t(A)
+```
+```{r}
+solve(A)
+```
+h.Đưa ra giá trị riêng và vectơ riêng của ma trận B.
+Giá trị riêng:
+```{r}
+eigen(B)$values
+```
+Vector riêng:
+```{r}
+eigen(B)$vectors
+```
+i.Tính định thức của ma trận B.
+```{r}
+det(B)
+```
+j.Tính tích AB.
+```{r}
+A %*% B
+```
+k.Biết Z là tích của ma trận A và ma trận nghịch đảo của B. Tìm Z.
+```{r}
+Z <- A %*% solve(B)
+Z
+```
