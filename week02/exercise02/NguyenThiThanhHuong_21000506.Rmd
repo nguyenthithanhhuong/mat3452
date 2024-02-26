@@ -9,7 +9,7 @@ output: html_document
 Đọc file dữ liệu "Australian Institute of Sport.csv":
 ```{r}
 data01 <- read.csv(
-  "D:\\Study\\[MAT3452]_PhanTichThongKeNhieuChieu\\week02\\Australian Institute of Sport.csv",
+  "D:\\Code\\r\\mat3452\\week02\\Australian Institute of Sport.csv",
   header = TRUE
 )
 data01
