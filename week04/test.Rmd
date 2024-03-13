@@ -1,0 +1,199 @@
+---
+title: "Bài tập tuần 4 - 5: Biểu đồ tán xạ - Phân bố chuẩn nhiều chiều - Kiểm định gttb một mẫu, hai mẫu"
+author: "nguyenthithanhhuong"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+#### **Câu 1**\
+Sinh ngẫu nhiên gồm 100 quan sát tuân theo phân phối chuẩn 3 chiều với giá trị trung bình và ma trận hiệp phương sai đã cho:
+
+```{r}
+set.seed(100)
+library(mvtnorm)
+x = rmvnorm(
+  5, 
+  mean = c(0, 0, 1), 
+  sigma = matrix(c(1,.8,.6,.8,1,.8,.6,.8,1), 3, 3)
+)
+x
+```
+
+Đặt tên các biến lần lượt là A, B và C. Thêm một biến vào mẫu trên, đặt tên D gồm
+100 quan sát được sinh ngẫu nhiên biết nó tuân theo phân phối chuẩn với hai tham số
+0.5 và 0.5.
+
+```{r}
+A <- x[,1]
+A
+B <- x[,2]
+B
+C <- x[,3]
+C
+D <- rnorm(n = 100, mean = 0.5, sd = sqrt(0.5))
+D
+data <- data.frame(A,B,C,D)
+head(data)
+```
+
+b. Tính giá trị trung bình mẫu, ma trận tương quan mẫu và ma trận hiệp phương sai
+mẫu.
+
+```{r}
+# Giá trị trung bình mẫu
+colMeans(data)
+# Ma trận tương quan mẫu
+cov(data)
+# Ma trận hiệp phương sai mẫu
+cor(data)
+```
+
+c.Vẽ biểu đồ phân tán của các biến và biểu đồ nhiệt của ma trận tương quan mẫu. \
+Biểu đồ phân tán
+
+```{r}
+pairs(
+  data,
+  lwd = 1,
+  pch = 16,
+  cex = .5,
+  col = "red",
+  gap = 0,
+  xaxt = "n",
+  yaxt = "n"
+)
+```
+\
+Biểu đồ nhiệt:
+```{r}
+library(reshape2)
+cor_df <- round(cor(data), 2)
+melted_cor <- melt(cor_df)
+
+library(ggplot2)
+ggplot(
+  data = melted_cor,
+  aes(x = Var1, y = Var2, fill = value)
+) + 
+  geom_tile() + 
+  geom_text(
+    aes(Var2, Var1, label = value), 
+    size = 1 
+  ) + 
+  scale_fill_gradient2(
+    low = "blue", 
+    high = "red", 
+    limit= c(-1, 1), 
+    name = "Correlation"
+  ) + 
+  theme(
+    axis.title.x = element_blank(), 
+    axis.title.y = element_blank(),
+    panel.background = element_blank()
+  ) 
+```
+\
+d.Kiểm tra tính chuẩn 4−chiều.
+```{r}
+shapiro_tests <- lapply(data, shapiro.test)
+names(shapiro_tests) <- names(data)
+shapiro_tests
+```
+
+#### **Câu 2**\
+Lấy dữ liệu từ tập Smarket trong thư viện ISLR:
+```{r}
+library(ISLR)
+data("Smarket")
+X <- Smarket[, c(2:8)]
+head(X)
+```
+a.Tính giá trị trung bình mẫu, ma trận tương quan mẫu và ma trận hiệp phương sai mẫu của X.
+```{r}
+# Giá trị trung bình mẫu
+colMeans(X)
+# Ma trận tương quan mẫu
+cov(X)
+# Ma trận hiệp phương sai mẫu
+cor(X)
+```
+b.Vẽ biểu đồ phân tán của các biến và biểu đồ nhiệt của ma trận tương quan mẫu của X.\
+Biểu đồ tán xạ
+```{r}
+pairs(
+  X,
+  lwd = 1,
+  pch = 16,
+  cex = .5,
+  col = "red",
+  gap = 0,
+  xaxt = "n",
+  yaxt = "n"
+)
+```
+\
+Biểu đồ nhiệt
+```{r}
+library(reshape2)
+cor_df <- round(cor(X), 2)
+melted_cor <- melt(cor_df)
+
+library(ggplot2)
+ggplot(
+  data = melted_cor,
+  aes(x = Var1, y = Var2, fill = value)
+) + 
+  geom_tile() + 
+  geom_text(
+    aes(Var2, Var1, label = value), 
+    size = 1 
+  ) + 
+  scale_fill_gradient2(
+    low = "blue", 
+    high = "red", 
+    limit= c(-1, 1), 
+    name = "Correlation"
+  ) +
+  theme(
+    axis.title.x = element_blank(), 
+    axis.title.y = element_blank(),
+    panel.background = element_blank()
+  )
+```
+\
+c. Kiểm tra tính chuẩn nhiều chiều của X.
+```{r}
+shapiro_tests <- lapply(X, shapiro.test)
+names(shapiro_tests) <- names(X)
+shapiro_tests
+```
+d.Có sự khác biệt giữa lợi nhuận trung bình một ngày trước và ba ngày trước ngày đang xét không?
+```{r}
+t.test(X$Lag1,X$Lag3)
+```
+e.Lợi nhuận trung bình tại ngày đang xét và các ngày trước đó có thực sự khác 0 không?
+```{r}
+data <- data.frame(
+  X$Today, 
+  X$Lag1, 
+  X$Lag2, 
+  X$Lag3, 
+  X$Lag4, 
+  X$Lag5
+)
+lapply(data, t.test)
+```
+f.Kiểm định xem có sự khác biệt giữa năm 2004 và 2005 về lợi nhuận trung bình tại ngày đang xét và các ngày trước đó không?
+```{r}
+data04 <- X[Smarket$Year == 2004,]
+data05 <- X[Smarket$Year == 2005,]
+sapply(
+  colnames(X[, -6]),
+  function(colName) {
+    ttest = t.test(
+      data04[, colName],
+      data05[, colName]
+    )
+  }
+)
+```

@@ -1,7 +1,7 @@
 ---
 title: 'Tuần 3: Bài tập phân bố chuẩn'
 author: "nguyenthithanhhuong"
-date: "`r Sys.Date()`"
+date: "2024-02-28"
 output: html_document
 ---
 
@@ -50,20 +50,23 @@ b.Các biến trong bộ dữ liệu có tuân theo phân phối chuẩn không?
 ```{r}
 shapiro.test(data$dist)
 ```
-Do p-value < 0.05 nên độ dài các đường đua không tuân theo phân bố chuẩn.\
+Kết luận: Do p-value < 0.05 nên độ dài các đường đua không tuân theo phân bố chuẩn.\
 Độ cao đạt được:
 ```{r}
 shapiro.test(data$climb)
 ```
-Do p-value < 0.05 nên độ cao đạt được không tuân theo phân bố chuẩn.\
+Kết luận: Do p-value < 0.05 nên độ cao đạt được không tuân theo phân bố chuẩn.\
 Thời gian chạy của người chiến thắng:
 ```{r}
 shapiro.test(data$time)
 ```
-Do p-value < 0.05 nên thời gian chạy của người chiến thắng không tuân theo phân bố chuẩn.\
-c.Dùng hàm pairs để vẽ ma trận biểu đồ tán xạ cho bộ dữ liệu
+Kết luận: Do p-value < 0.05 nên thời gian chạy của người chiến thắng không tuân theo phân bố chuẩn.\
+c.Dùng hàm pairs để vẽ ma trận biểu đồ tán xạ cho bộ dữ liệu:
 ```{r}
-pairs(data, col = c("pink", "purple", "green"))
+pairs(
+  data, 
+  col = c("pink", "purple", "green")
+)
 ```
 \
 d.Có thể có biểu diễn tuyến tính của biến thời gian theo một hay hai biến còn lại? Vì
@@ -72,7 +75,7 @@ sao? Đưa ra mô hình hồi quy tuyến tính phù hợp.
 lm.fit <- lm(data$time ~ data$dist + data$climb, data = hills)
 lm.fit
 ```
-Như vậy, có thể biểu diễn tuyến tính biến thời gian theo hai biến còn lại.\
+Kết luận: Có thể biểu diễn tuyến tính biến thời gian theo hai biến còn lại.\
 Mô hình hồi quy tuyến tính: **time = -8.99204 + 6.21796 * dist + 0.01105 * climb**\
 e.Tính giá trị trung bình và phương sai của bình phương hiệu số giữa thời gian quan
 sát và thời gian dự đoán theo mô hình ở ý (d). Bình phương hiệu số đó có phân phối
@@ -94,7 +97,8 @@ chuẩn không?
 ```{r}
 shapiro.test(squaredDiffTime)
 ```
-p-value < 0.05 nên bình phương hiệu số trên không tuân theo phân bố chuẩn.
+Kết luận: Do p-value < 0.05 nên bình phương hiệu số trên không tuân theo phân bố chuẩn. \
+
 #### **Bài 2:**
 Tải tập dữ liệu **iris** trong thư viện **datasets**:
 ```{r}
@@ -119,23 +123,24 @@ b.Các biến trong bộ dữ liệu có tuân theo phân phối chuẩn không?
 ```{r}
 shapiro.test(data$Petal.Length)
 ```
-Do p-value < 0.05 nên độ dài cánh hoa không tuân theo phân bố chuẩn.\
+Kết luận: Do p-value < 0.05 nên độ dài cánh hoa không tuân theo phân bố chuẩn.\
 Độ rộng cánh hoa:
 ```{r}
 shapiro.test(data$Petal.Width)
 ```
-Do p-value < 0.05 nên độ rộng cánh hoa không tuân theo phân bố chuẩn.\
+Kết luận: Do p-value < 0.05 nên độ rộng cánh hoa không tuân theo phân bố chuẩn.\
 Độ dài đài hoa:
 ```{r}
 shapiro.test(data$Sepal.Length)
 ```
-Do p-value < 0.05 nên độ dài đài hoa không tuân theo phân bố chuẩn.\
+Kết luận: Do p-value < 0.05 nên độ dài đài hoa không tuân theo phân bố chuẩn.\
 Độ rộng đài hoa:
 ```{r}
 shapiro.test(data$Sepal.Width)
 ```
-Do p-value > 0.05 nên độ rộng đài hoa tuân theo phân bố chuẩn.\
+Kết luận: Do p-value > 0.05 nên độ rộng đài hoa tuân theo phân bố chuẩn.\
 c.Vẽ đồ thị hàm mật độ và hàm phân phối của các biến có phân phối chuẩn trên cùng một khung hình. Đặt tên đồ thị, tên và độ dài các trục phù hợp.\
+Do độ rộng đài hoa (Sepal.Width) tuân theo phân bố chuẩn nên ta vẽ hàm mật độ và hàm phân bố của biến này: \
 ```{r}
 plot(
   data$Sepal.Width,
@@ -145,11 +150,11 @@ plot(
     sd(data$Sepal.Width)
   ),
   xlab = "Giá trị của iris$Sepal.Width",
+  ylab = "",
   xlim = c(1.75, 4.5),
   ylim = c(0, 1.25),
   col = "red",
   type = "l",
-  ylab = ""
 )
 lines(
   data$Sepal.Width,
@@ -158,8 +163,8 @@ lines(
     mean(data$Sepal.Width),
     sd(data$Sepal.Width)
   ),
-  col = "purple",
-  ylab = ""
+  ylab = "",
+  col = "purple"
 )
 title("Hàm mật độ và hàm phân bố của iris$Sepal.Width")
 ```
@@ -173,7 +178,7 @@ t.test(
   conf.level = 0.99
 )
 ```
-Do p-value < 0.05, nên với mức ý nghĩa 5% có thể kết luận giá trị trung bình củ đài hoa nhỏ hơn 3.5\
+Kết luận: Do p-value < 0.05, nên với mức ý nghĩa 5% có thể kết luận giá trị trung bình của đài hoa nhỏ hơn 3.5\
 e.Tìm a, biết xác suất để độ rộng đài hoa nhỏ hơn a là 70%.
 ```{r}
 qnorm(
@@ -192,4 +197,4 @@ t.test(
   versicolor,
   conf.level = 0.99)
 ```
-Do p-value < 0.05 nên Độ rộng trung bình của đài hoa của loài setosa và versicolor thực sự khác nhau.
+Kết luận: Do p-value < 0.05 nên Độ rộng trung bình của đài hoa của loài setosa và versicolor thực sự khác nhau.
