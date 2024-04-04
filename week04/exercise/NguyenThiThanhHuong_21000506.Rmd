@@ -100,6 +100,8 @@ names(shapiro_tests) <- names(data)
 shapiro_tests
 ```
 
+Kết luận: Do A, B, C có p-value < 0.05nên không tuân theo phân phối chuẩn nên x không tuân theo phân phối chuẩn 4-chiều\
+
 #### **Câu 2**\
 Lấy dữ liệu từ tập Smarket trong thư viện ISLR:
 ```{r}
@@ -167,10 +169,12 @@ shapiro_tests <- lapply(X, shapiro.test)
 names(shapiro_tests) <- names(X)
 shapiro_tests
 ```
+Kết luận: Do các biến có p-value < 0.05 nên X không tuân theo phan bố chuẩn nhiều chiều\
 d.Có sự khác biệt giữa lợi nhuận trung bình một ngày trước và ba ngày trước ngày đang xét không?
 ```{r}
 t.test(X$Lag1,X$Lag3)
 ```
+Kết luận: Do p-value > 0.05 nên có cơ sở bác bỏ H0, tức là Có sự khác biệt giữa lợi nhuận trung bình một ngày trước và ba ngày trước ngày đang xét \
 e.Lợi nhuận trung bình tại ngày đang xét và các ngày trước đó có thực sự khác 0 không?
 ```{r}
 data <- data.frame(
@@ -183,6 +187,7 @@ data <- data.frame(
 )
 lapply(data, t.test)
 ```
+Kết luận: Do tất cả các giá trị p-value > 0.05 nên có cơ sở bác bỏ H0, tức là lợi nhuận trung bình tại ngày đang xét và các ngày trước đó có thực sự khác 0\
 f.Kiểm định xem có sự khác biệt giữa năm 2004 và 2005 về lợi nhuận trung bình tại ngày đang xét và các ngày trước đó không?
 ```{r}
 data04 <- X[Smarket$Year == 2004,]
@@ -197,3 +202,4 @@ sapply(
   }
 )
 ```
+Kết luận: Do tất cả các giá trị p-value > 0.05 nên có cơ sở bác bỏ H0, tức là có sự khác biệt giữa năm 2004 và 2005 về lợi nhuận trung bình tại ngày đang xét và các ngày trước đó

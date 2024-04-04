@@ -1,0 +1,189 @@
+---
+title: "Bài tập tuần 6: Phân tích thành phần chính - Thành phần nhân tố"
+author: "nguyenthithanhhuong"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+#### **Bài 8.1**
+Đọc dữ liệu:
+```{r}
+path <- "D:/Code/r/mat3452/week06/data/investment.txt"
+invest <- read.table(path, header = TRUE)
+invest <- invest[, -1]
+head(invest)
+```
+Tìm giá trị riêng của ma trận tương quan:
+```{r}
+eigen(cor(invest))$values
+```
+Tìm vector riêng của ma trận tương quan:
+```{r}
+eigen(cor(invest))$vectors
+```
+Chứng minh rằng các vector riêng đại diện cho phương sai của các thành phần chính của ma trận tương quan bằng câu lệnh:
+```{r}
+sqrt(eigen(cor(invest))$values) 
+```
+Xác minh rằng các giá trị này giống như các giá trị được nhận từ các thành phần chính bằng câu lệnh:
+```{r}
+princomp(invest, cor = TRUE)
+```
+
+#### **Bài 8.2**
+Đọc bộ dữ liệu Harmon23.cor:
+```{r}
+library(datasets)
+data("Harman23.cor")
+head(Harman23.cor)
+```
+a.Phân tích bộ dữ liệu với m = 3
+```{r}
+factanal(factors = 3, covmat = Harman23.cor)
+```
+b.Thực hiện tìm mô hình phù hợp. Sử dụng m = 4
+```{r}
+factanal(factors = 4, covmat = Harman23.cor)
+```
+Kết luận: Do p-value = 0.0988 > 0.05 nên sử dụng 4 nhân tố là đủ \
+c.Phân tích thành phần chính trên ma trận tương quan mẫu và không sử dụng ma trận tương quan mẫu \
+Phân tích thành phần chính trên ma trận tương quan mẫu:
+```{r}
+pca01 <- princomp(covmat = Harman23.cor, cor = TRUE)
+pca01
+```
+
+Tóm tắt kết quả:
+```{r}
+summary(pca01)
+```
+
+Phân tích thành phần chính không sử dụng ma trận tương quan mẫu:
+```{r}
+pca02 <- princomp(covmat = Harman23.cor)
+pca02
+```
+
+Tóm tắt kết quả:
+```{r}
+summary(pca02)
+```
+
+Kết luận: Việc phân tích thành phần chính theo 2 cách trong bộ dữ liệu này không có sự khác nhau
+
+#### **Bài 8.5**
+Đọc dữ liệu
+```{r}
+library(datasets)
+data("USJudgeRatings")
+head(USJudgeRatings)
+```
+a.Sử dụng biểu đồ pairs để phát hiện ra một số biến có mối tương quan rất cao:
+```{r}
+pairs(
+  USJudgeRatings,
+  lwd = 1,
+  pch = 16,
+  cex = .5,
+  col = "red",
+  gap = 0,
+  xaxt = "n",
+  yaxt = "n"
+)
+```
+\
+b.Thực hiện phân tích thành phần chính cho dữ liệu:
+```{r}
+pca <- princomp(USJudgeRatings)
+pca
+```
+
+Tóm tắt kết quả:
+```{r}
+summary(pca)
+```
+
+#### **Bài 8.6**
+Đọc dữ liệu
+```{r}
+library(datasets)
+data("ability.cov")
+head(ability.cov)
+```
+a. Thực hiện phân tích factor trên ma trận hiệp phương sai.
+```{r}
+factanal(factors = 2, covmat = ability.cov)
+```
+b. Thực hiện phân tích thành phần chính bằng các sử dụng ma trận hiệp phương sai. Sử dụng các loadings để xác định các biến nào được nhóm lại với nhau trong 2 factor đầu tiên
+```{r}
+ability.cor <- cov2cor(ability.cov$cov)
+pc <- princomp(ability.cor)
+summary(pc)
+pc$loadings
+```
+Kết luận: \
+Trong Comp.1: reading(0.599) và vocab(0.584) có loadings dương tương đối lớn nên có xu hướng được nhóm lại với nhau \
+Trong Comp.2: picture(0.683) và maze(-0.645) có loadings hướng ngược nhau tương đối lớn nên có xu hướng được nhóm lại với nhau \
+d. Sử dụng ma trận tương quan phân tích thành phần chính của dữ liệu. Xem xét các loadings và diễn giải hai thành phần chính đầu tiên. So sánh với phần a, b và chỉ ra điểm khác biệt giữa chúng
+```{r}
+pc01 <- princomp(ability.cor)
+pc01
+pc02 <- princomp(ability.cor)
+pc02
+pc01$loadings
+pc02$loading
+```
+
+Kết luận: Không có điểm khác biệt với phần a, b
+
+#### **Bài 8.9**
+Đọc dữ liệu
+```{r}
+library(datasets)
+data("trees")
+head(data)
+```
+a. Vẽ biểu đồ pairs
+```{r}
+pairs(
+  trees,
+  lwd = 1,
+  pch = 16,
+  cex = .5,
+  col = "red",
+  gap = 0,
+  xaxt = "n",
+  yaxt = "n"
+)
+```
+\
+b. \
+Phân tích thành phần chính
+```{r}
+pcacor <- princomp(trees, cor = TRUE)
+pcacor
+```
+Dựa trên kết quả phân tích thành phần chính xem cách các biến ban đầu tương quan với các thành phần chính
+```{r}
+biplot(
+  pcacor, 
+  col = c(2, 3), 
+  cex = c(.4, 1),
+  xlim = c( -.45, .45),
+  xlab = "First principal component",
+  ylab = "Second principal component",
+  main = "Biplot for investment allocations"
+)
+```
+\
+Xác định các ngoại lệ trong dữ liệu
+```{r}
+outliers <- which(rowSums((trees - pcacor$center)^2) > 3 * sum(pcacor$sdev^2) / length(pcacor$sdev))
+if(length(outliers) > 0) {
+  print("Outliers:")
+  print(trees[outliers, ])
+} else {
+  print("No outliers.")
+}
+
+```

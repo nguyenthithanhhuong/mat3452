@@ -1,0 +1,82 @@
+---
+title: 'Bài tập tuần 7: Mô hình HQTT bội'
+author: "nguyenthithanhhuong"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+#### **Bài 1:**
+Dọc dữ liệu
+```{r}
+library(MASS)
+data("Boston")
+```
+Phân tích hồi quy bội
+của biến medv (giá nhà trung bình – đơn vị: nghìn $) theo các biến còn lại.
+```{r}
+univ <- lm(formula = medv ~ ., data = Boston)
+fit <- univ$fitted.values
+fit 
+```
+a. Đưa ra ước lượng các hệ số trong mô hình hồi quy tuyến tính của medv theo
+các biến còn lại. 
+```{r}
+s = summary(univ)
+s
+```
+Kiểm định xem các hệ số trong mô hình hồi quy tuyến tính thu được có thực sự khác 0 không? \
+Có 13 bài toán kiểm định hệ số: H0: a_i = 0, H1: a_i != 0 (i=1,2,3,4)\
+Đối với hệ số a3 của biến indus và a7 của biến age, ta thấy p-value > 0.05 nên chấp nhận H0 --> hai biến am và carb không có ý nghĩa trong mô hình\
+Đối với hệ số của các biến còn lại, ta thấy p-value < 0.05 nên bác bỏ H0 --> các biến có ý nghĩa trong mô hình\
+Phần dư có tuân theo phân phối chuẩn với giá trị trung bình bằng 0 không?\
+```{r}
+shapiro.test(s$residuals)
+```
+Nhận xét: p-value < 0.05 nên phần dư không tuân theo phân bố chuẩn
+```{r}
+t.test(s$residuals)
+```
+Nhận xét: p-value > 0.05, chấp nhận H0\
+b. Đưa ra mô hình hồi quy tuyến tính “forward” và “ backward” tốt nhất theo
+tiêu chuẩn AIC.
+```{r}
+attach(Boston)
+only = lm(medv ~ 1, data = Boston) # Mô hình đơn giản
+all = lm(medv ~ ., data = Boston) # Mô hình phức tạp nhất
+forward = step(only, formula(all), direction = "forward", trace = 0)
+forward$anova
+backward = step(all, formula(all), direction = "backward", trace = 0)
+backward$anova
+```
+c. Khi phân tích “forward”, nếu biến medv được biểu diễn theo hai biến thì đó
+là những biến nào?\
+Nhận xét: nếu biến medv được biểu diễn theo hai biến thì sẽ được biểu diễn theo lstat và rm\
+d. Khi phân tích “backward”, kiểm định xem các hệ số trong mô hình hồi quy
+tuyến tính thu được có thực sự khác 0 không? Phần dư có tuân theo phân
+phối chuẩn với giá trị trung bình bằng 0 không?\
+```{r}
+anova(backward)
+```
+Nhận xét: Các biến trong mô hình có P-value < 0.05, bác bỏ H0: a_i = 0 --> các biến có ý nghĩa trong mô hình\
+Phần dư có tuân theo phân
+phối chuẩn với giá trị trung bình bằng 0 không?\
+```{r}
+shapiro.test(backward$residuals)
+```
+Nhận xét: p-value < 0.05 nên phần dư không tuân theo phân bố chuẩn
+```{r}
+t.test(backward$residuals)
+```
+Nhận xét: p-value > 0.05, chấp nhận H0\
+
+#### **Bài 2:**
+
+```{r}
+library(datasets)
+library(MASS)
+data(mtcars)
+univ <- lm(mpg ~ cyl + disp + hp + drat + wt + qsec +
+vs + am + gear + carb, data = mtcars)
+backward <- stepAIC(univ)
+summary(backward)
+```
