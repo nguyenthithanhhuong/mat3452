@@ -1,0 +1,152 @@
+---
+title: 'Bài tập: Phân cụm'
+author: "nguyenthithanhhuong"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+#### **Bài 11.1:**
+a. \
+Sử dụng khoảng cách Euclid:
+
+```{r}
+library(ape)
+data(iris)
+
+id_euclid <- dist(scale(iris[, 1:4]))
+fit_euclid <- hclust(id_euclid)
+plot(as.phylo(fit_euclid), type="phylogram", cex=0.5, label.offset=0.1, tip.col=c(rep("red", 50), rep("blue", 50), rep("green", 50)))
+```
+\
+Sử dụng khoảng cách maximum:
+
+```{r}
+id_max <- dist(scale(iris[, 1:4]), method = "maximum")
+fit_max <- hclust(id_max)
+plot(as.phylo(fit_max), type="phylogram", cex=0.5, label.offset=0.1, tip.col=c(rep("red", 50), rep("blue", 50), rep("green", 50)))
+```
+\
+Sử dụng khoảng cách Manhattan:
+
+```{r}
+id_manhat <- dist(scale(iris[, 1:4]), method = "manhattan")
+fit_manhat <- hclust(id_manhat)
+plot(as.phylo(fit_manhat), type="phylogram", cex=0.5, label.offset=0.1, tip.col=c(rep("red", 50), rep("blue", 50), rep("green", 50)))
+```
+\
+Sử dụng khoảng cách Minkowski:
+
+```{r}
+id_mink <- dist(scale(iris[, 1:4]), method = "minkowski", p = 3)
+fit_mink <- hclust(id_mink)
+plot(as.phylo(fit_mink), type="phylogram", cex=0.5, label.offset=0.1, tip.col=c(rep("red", 50), rep("blue", 50), rep("green", 50)))
+```
+
+\ b.
+
+```{r}
+canmed = read.table("D:/Code/r/mat3452/week11/data/Canmed.txt", header=T, row.names =1)
+canmed <- canmed[-14, ] 
+```
+\
+Tính khoảng cách khi không chuẩn hóa dữ liệu:
+
+```{r}
+distant <- dist(canmed)
+
+cluster <- hclust(distant) 
+
+plot(cluster, xlab = "", sub = "", main = "", ylab = "", yaxt = "n")
+```
+
+\ Tính khoảng cách Mathattan:
+
+```{r}
+distant_manhat <- dist(canmed, method = "manhattan")
+
+cluster_manhat <- hclust(distant_manhat)
+
+plot(cluster_manhat, xlab = "", sub = "", main = "", ylab = "", yaxt = "n")
+```
+
+Đồ thị dendrogram có thể thay đổi khi sử dụng scaling vì khoảng cách giữa các điểm dữ liệu dựa trên giá trị thực tế thay vì giá trị chuẩn hóa. Nếu các biến có đơn vị và phạm vi khác nhau, scaling giúp dendrogram dễ hiểu hơn bằng cách cân bằng ảnh hưởng của các biến. Nếu các biến có cùng đơn vị và phạm vi giá trị tương đương, đồ thị không scaling có thể dễ hiểu hơn vì nó phản ánh giá trị thực tế. Sử dụng các độ đo khoảng cách khác nhau cũng làm thay đổi hình dạng của dendrogram.
+
+
+#### **Bài 11.2:**
+
+```{r}
+data(swiss)
+distant <- dist(swiss$Infant.Mortality)
+hclust <- hclust(distant)
+
+plot(hclust, xlab = "", sub = "", main = "Dendrogram for Infant Mortality", ylab = "", yaxt = "n")
+```
+
+Phân tích dendrogram của các canton dựa trên tỷ lệ tử vong trẻ sơ sinh cho thấy các nhóm canton có tỷ lệ tử vong tương tự nhau. Canton có tỷ lệ tử vong trẻ sơ sinh thấp hơn thường ở giai đoạn cuối của quá trình chuyển đổi dân số, trong khi những canton có tỷ lệ cao hơn ở giai đoạn đầu. Điều này chứng tỏ rằng một số canton đã bắt đầu quá trình chuyển đổi dân số sớm hơn các canton khác. 
+
+
+#### **Bài 11.3:**
+
+```{r}
+bond <- as.matrix(read.table(header = TRUE, text = "
+Issuer 1mo 3mo 6mo 8mo 1yr 3yr 5yr
+USGovt 1.88 4.45 6.37 8.39 7.97 7.68 5.94
+AustAsia -0.19 9.47 4.94 5.52 13.93 10.46 9.13
+Canada 2.22 3.98 5.48 7.30 7.07 7.27 5.20
+Eurozone 2.42 2.73 4.30 5.92 6.55 6.92 4.11
+Japan 0.66 2.20 3.08 3.14 3.94 3.01 2.04
+Switzerland 2.18 2.89 5.06 6.64 8.59 7.00 3.61
+UK 4.70 6.12 10.35 10.69 8.69 9.01 5.99
+")[, -1])
+bond
+
+distant <- dist(bond)
+
+hclust <- hclust(distant)
+
+# Plot dendrogram
+plot(hclust, main = "Hierarchical Clustering of Government Bond Returns", xlab = "", sub = "")
+```
+
+Mỹ và Canada được phân cụm cùng nhau do vị trí Bắc Mỹ và liên kết kinh tế chặt chẽ. Eurozone và Thụy Sĩ cũng cùng cụm vì cùng ở châu Âu và có liên kết tài chính, thương mại mạnh. Anh và Nhật Bản, dù không gần nhau về địa lý, nhưng đều là nền kinh tế phát triển với thị trường tài chính ổn định. AustAsia không được nhóm với bất kỳ quốc gia nào khác do tình hình kinh tế, tài chính riêng biệt.
+
+#### **Bài 11.5:**
+
+```{r}
+library(robustbase)
+
+data(coleman)
+
+# (a)
+model <- lm(Y ~ ., data = coleman)
+summary(model)
+
+distant <- dist(coleman[, -1]) 
+hclust <- hclust(distant)
+plot(as.dendrogram(hclust), main = "Hierarchical Clustering of Coleman Data", xlab = "", sub = "")
+
+kmeans_coleman <- kmeans(coleman[, -1], centers = 4)
+(kmeans_coleman)
+```
+
+#### **Bài 11.6:**
+
+```{r}
+data(milk)
+
+scale_milk <- scale(milk[-70, ])
+
+pca_milk <- prcomp(scale_milk)
+
+kmeans_milk <- kmeans(pca_milk$x[, 1:2], centers = 3)
+
+library(cluster)
+clusplot(pca_milk$x[, 1:2], kmeans_milk$cluster, color = TRUE, shade = TRUE, labels = 2, lines = 0, main="Kmeans")
+
+pam_milk <- pam(scale_milk, k = 3)
+print(pam_milk)
+
+milk_outlier <- scale(milk[-70, ])
+pam_milk_outlier <- pam(milk_outlier, k = 3)
+print(pam_milk_outlier)
+```

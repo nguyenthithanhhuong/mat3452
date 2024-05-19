@@ -1,0 +1,15 @@
+ProvinceOrTerritory Doctors Nurses Psychologists SocialWorkers Other
+NewfoundlandandLabrador 137 1149 45 179 1843
+PrinceEdwardIsland 97 1203 22 101 2153
+NovaScotia 153 1066 47 141 2268
+NewBrunswick 115 1121 53 172 2215
+Quebec 142 825 95 150 2259
+Ontario 127 825 45 166 1874
+Manitoba 121 1061 36 197 2421
+Saskatchewan 114 992 42 179 2354
+Alberta 131 989 54 149 2096
+BritishColumbia 134 584 45 134 1956
+Yukon 331 1110 50 348 1722
+Northwestterritories 97 1047 61 207 1595
+Nunavut 85 648 34 222 801
+Canada,overall 132 881 58 157 2052

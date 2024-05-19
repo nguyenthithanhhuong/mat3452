@@ -1,0 +1,16 @@
+---
+title: 'Tuần 8: Hồi quy bội'
+author: "nguyenthithanhhuong"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+#### **Bài 9.8:**
+
+```{r}
+library(MASS)
+data(mtcars)
+univ <- lm(mpg ~ ., mtcars)
+influence(univ)
+plot(univ)
+```
